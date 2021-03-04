@@ -1,0 +1,74 @@
+h1 {
+  padding: 1.5rem;
+  text-align: left;
+  color: var(--inactive-color);
+}
+
+.grid-notes-area h5 {
+  margin: 1rem;
+  text-align: left;
+}
+
+.title-of-app {
+  grid-area: heading;
+}
+
+.sidebar {
+  grid-area: sidebar;
+  max-width: 250px;
+  width: 100%;
+  padding-right: 4rem;
+}
+.input-grid-section {
+  grid-area: inputArea;
+  width: 80%;
+  justify-self: center;
+}
+.main-notes-grid {
+  grid-area: main;
+}
+.footer-grid {
+  grid-area: footer;
+}
+.notes-keeping-area {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1rem;
+}
+.grid-notes-area {
+  width: 100%;
+  display: grid;
+  gap: 1rem;
+  grid-template-areas:
+    "heading heading heading heading"
+    "sidebar inputArea inputArea inputArea"
+    "sidebar main main main"
+    "sidebar main main main"
+    "sidebar main main main"
+    "footer footer footer footer";
+  align-items: flex-start;
+}
+
+@media screen and (max-width: 768px) {
+  .grid-notes-area {
+    grid-template-areas:
+      "heading"
+      "inputArea"
+      "sidebar"
+      "main"
+      "main"
+      "main"
+      "footer";
+  }
+  .notes-keeping-area {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  h1 {
+    text-align: center;
+    padding: 2rem 0 0.5rem;
+  }
+  .sidebar {
+    padding: 0;
+  }
+}

@@ -1,0 +1,30 @@
+:root {
+  --lightGray-color: rgb(0, 0, 0, 0.2);
+  --inactive-color: rgba(0, 0, 0, 0.54);
+  --hover-color: rgba(95, 99, 104, 0.157);
+  --primary-color: rgb(32, 33, 53);
+  --focus-color: #feefc3;
+}
+
+* {
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Roboto", sans-serif;
+  color: --primary-color;
+}
+
+.App {
+  width: 100%;
+  padding-right: 1.5rem;
+  padding-bottom: 1.5rem;
+}
+
+.boxShadow {
+  box-shadow: 0 1px 4px var(--lightGray-color);
+}
+
+@media screen and (max-width: 768px) {
+  .App {
+    padding-left: 1.5rem;
+  }
+}

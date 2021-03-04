@@ -1,0 +1,57 @@
+.input-container {
+  padding: 1rem;
+  border-radius: 0.5rem;
+  box-shadow: 0px 0px 5px var(--primary-color);
+  position: relative;
+}
+
+.input-text-section-container .text {
+  background-color: transparent;
+  width: 100%;
+  display: block;
+  border: none;
+  margin-bottom: 1rem;
+  padding-right: 2rem;
+  outline: none;
+  word-wrap: break-word;
+  font-size: 1rem;
+  resize: none;
+}
+.input-text-section-container .title-text-style {
+  font-weight: 500;
+  font-size: 1.1rem;
+}
+.input-text-section-container .text::-webkit-scrollbar {
+  width: 4px;
+}
+.input-text-section-container .text::-webkit-scrollbar-track {
+  background: var(--hover-color);
+}
+.input-text-section-container .text::-webkit-scrollbar-thumb {
+  background: var(--lightGray-color);
+}
+.edit-section-container .tag {
+  border: 1px solid var(--primary-color);
+  border-radius: 1rem;
+  display: inline-block;
+  padding: 0.3rem;
+}
+.edit-section-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin: 0.5rem 0 0;
+}
+.edit-section-container button {
+  background-color: transparent;
+  border: none;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 1rem;
+  padding: 0.3rem 1rem;
+  transition: 200ms ease;
+}
+.edit-section-container button:hover {
+  background-color: var(--hover-color);
+}

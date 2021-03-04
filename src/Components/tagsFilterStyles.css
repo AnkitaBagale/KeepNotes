@@ -1,0 +1,99 @@
+input.tagFilter {
+  height: 0;
+  width: 0;
+  opacity: 0;
+}
+.tags-area h3 {
+  padding: 0 0 0.5rem 1.5rem;
+}
+.tags-area label {
+  cursor: pointer;
+  padding: 1rem 0 1rem 1.5rem;
+  display: block;
+  width: 100%;
+  text-align: left;
+  border-top-right-radius: 2rem;
+  border-bottom-right-radius: 2rem;
+  transition: 2ms ease;
+}
+.tags-area label:hover {
+  background-color: var(--hover-color);
+}
+.tags-area {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.input-for-new-tag {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-left: 1.5rem;
+}
+
+.input-for-new-tag input {
+  margin-top: 0.5rem;
+  display: inline-block;
+  max-width: 120px;
+  border: 2px solid var(--hover-color);
+  background-color: var(--hover-color);
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
+}
+.input-for-new-tag input:focus-within {
+  outline: none;
+  border: 2px solid var(--focus-color);
+  background-color: white;
+}
+.input-for-new-tag button {
+  background-color: transparent;
+  border: none;
+  font-size: 1.2rem;
+  height: 1.2rem;
+}
+.filter-arrow {
+  display: none;
+}
+.selected-tag-display {
+  display: none;
+}
+
+@media screen and (max-width: 768px) {
+  .tags-area label {
+    padding: 0.5rem 0 0.5rem 1.5rem;
+    display: inline-block;
+    /* width: 100%; */
+    text-align: left;
+    border-radius: 1rem;
+  }
+  .tags-area h3 {
+    padding-left: 1rem;
+    padding: 0.4rem 1rem;
+    display: inline;
+  }
+
+  .filter-section-content {
+    display: none;
+  }
+  .filter-arrow {
+    display: inline-block;
+    transition: 200ms ease;
+  }
+
+  .active-filter .filter-arrow {
+    transform: rotate(180deg);
+    position: relative;
+  }
+  .selected-tag-display {
+    display: inline;
+    padding: 0.5rem 1rem;
+    margin-left: 0.5rem;
+    background-color: var(--hover-color);
+    border-radius: 1rem;
+  }
+  .active-filter + .filter-section-content {
+    display: block;
+    padding-top: 1rem;
+  }
+}

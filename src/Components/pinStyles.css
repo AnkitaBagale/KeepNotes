@@ -1,0 +1,23 @@
+.note-pin {
+  border: none;
+  background-color: transparent;
+  font-size: 1.1rem;
+  cursor: pointer;
+  height: 32px;
+  width: 32px;
+  border-radius: 50%;
+  transition: 200ms ease;
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 1;
+}
+.note-pin:hover {
+  background-color: var(--hover-color);
+}
+.note-pin:hover i {
+  color: var(--primary-color) !important;
+}
+.note-pin i {
+  pointer-events: none;
+}

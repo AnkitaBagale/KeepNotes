@@ -39,6 +39,7 @@ h1 {
   width: 100%;
   display: grid;
   gap: 1rem;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
   grid-template-areas:
     "heading heading heading heading"
     "sidebar inputArea inputArea inputArea"
@@ -51,6 +52,7 @@ h1 {
 
 @media screen and (max-width: 768px) {
   .grid-notes-area {
+    grid-template-columns: 1fr;
     grid-template-areas:
       "heading"
       "inputArea"

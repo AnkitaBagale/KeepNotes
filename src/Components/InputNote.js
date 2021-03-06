@@ -40,7 +40,7 @@ export function InputNote({
       if (title && desc) {
         setNotes({
           ...notes,
-          [`id${Object.keys(notes).length + 1}`]: {
+          [`${Object.keys(notes).length + 1}`]: {
             title: title,
             desc: desc,
             tag: tag,

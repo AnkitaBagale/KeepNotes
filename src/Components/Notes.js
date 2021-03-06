@@ -26,35 +26,38 @@ export function Notes() {
     let pinnedNotesObject = [];
     let otherNotesObject = [];
     if (noteIds) {
-      noteIds.map((id) => {
-        let pushedNote = (
-          <EachNote
-            key={id}
-            id={id}
-            item={notes[id]}
-            notes={notes}
-            setNotes={setNotes}
-            tags={tags}
-          />
-        );
-        if (notes[id].isPinned) {
-          if (selectedTag === "All") {
-            pinnedNotesObject.push(pushedNote);
-          } else {
-            if (selectedTag === notes[id].tag) {
+      noteIds
+        .sort((id1, id2) => Number(id2) - Number(id1))
+        .map((id) => {
+          let pushedNote = (
+            <EachNote
+              key={id}
+              id={id}
+              item={notes[id]}
+              notes={notes}
+              setNotes={setNotes}
+              tags={tags}
+            />
+          );
+          if (notes[id].isPinned) {
+            if (selectedTag === "All") {
               pinnedNotesObject.push(pushedNote);
+            } else {
+              if (selectedTag === notes[id].tag) {
+                pinnedNotesObject.push(pushedNote);
+              }
             }
-          }
-        } else {
-          if (selectedTag === "All") {
-            otherNotesObject.push(pushedNote);
           } else {
-            if (selectedTag === notes[id].tag) {
+            if (selectedTag === "All") {
               otherNotesObject.push(pushedNote);
+            } else {
+              if (selectedTag === notes[id].tag) {
+                otherNotesObject.push(pushedNote);
+              }
             }
           }
-        }
-      });
+          return "";
+        });
     }
     // console.log(pinnedNotesObject, otherNotesObject);
     return (

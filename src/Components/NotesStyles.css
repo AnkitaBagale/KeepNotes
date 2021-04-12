@@ -73,4 +73,7 @@ h1 {
   .sidebar {
     padding: 0;
   }
+  .input-grid-section {
+    width: 100%;
+  }
 }

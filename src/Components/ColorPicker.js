@@ -1,32 +1,22 @@
 import { useState } from "react";
 import "./colorPickerStyles.css";
+import { colorsInArray } from "../Context";
 
-const colorsInArray = [
-  "#FFFFFF",
-  "#f28983",
-  "#fbbc04",
-  "#FFF475",
-  "#CCFF90",
-  "#A7FFEB",
-  "#CBF0F8",
-  "#AECBFA",
-  "#D7AEFB",
-  "#FDCFE8",
-  "#E6C9A8",
-  "#E8EAED"
-];
-
-export function ColorPicker({ setNotecolor, notecolor, colorChangeHandler }) {
+export function ColorPicker({ note, colorPickedHandler }) {
   const [isHidden, setHidden] = useState(true);
+
+  const colorPickedHandlerWrapper = (color) => {
+    colorPickedHandler(color);
+  };
+
+  const hideOrShowPalleteHandler = () => {
+    setHidden(!isHidden);
+  };
   return (
     <>
       <div
-        onMouseOver={() => {
-          setHidden(!isHidden);
-        }}
-        onMouseOut={() => {
-          setHidden(!isHidden);
-        }}
+        onMouseOver={hideOrShowPalleteHandler}
+        onMouseOut={hideOrShowPalleteHandler}
         className="palette"
       >
         <i className="fas fa-palette"></i>
@@ -43,14 +33,12 @@ export function ColorPicker({ setNotecolor, notecolor, colorChangeHandler }) {
                 style={{
                   backgroundColor: color,
                   border: `2px solid ${
-                    color === notecolor
+                    color === note.notecolor
                       ? "var(--primary-color)"
                       : "var(--lightGray-color)"
                   }`
                 }}
-                onClick={() => {
-                  colorChangeHandler(color);
-                }}
+                onClick={() => colorPickedHandlerWrapper(color)}
               ></div>
             );
           })}

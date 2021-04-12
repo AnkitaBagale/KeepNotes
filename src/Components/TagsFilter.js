@@ -1,10 +1,16 @@
 import { useState } from "react";
 import "./tagsFilterStyles.css";
+import { useNotes } from "../Context";
 
-export function TagsFilter({ tags, setTags, setSelectedTag, selectedTag }) {
+export function TagsFilter() {
   const [newTag, setNewTag] = useState("");
-  // console.log(selectedTag);
+
   const [isFilterOpen, setFilterOpen] = useState(false);
+
+  const {
+    state: { tags },
+    dispatch
+  } = useNotes();
 
   return (
     <div className="tags-area">
@@ -18,7 +24,7 @@ export function TagsFilter({ tags, setTags, setSelectedTag, selectedTag }) {
         <span role="img" className="filter-arrow">
           <i className="fas fa-chevron-down"></i>
         </span>
-        <span className="selected-tag-display">{selectedTag}</span>
+        <span className="selected-tag-display">{""}</span>
       </div>
       <div
         className={
@@ -27,47 +33,35 @@ export function TagsFilter({ tags, setTags, setSelectedTag, selectedTag }) {
             : "filter-section-content"
         }
       >
-        <label
-          style={{
-            backgroundColor: `${
-              selectedTag === "All" ? "var(--focus-color)" : ""
-            }`
-          }}
-        >
-          All
-          <input
+        <ul className="list-style-none">
+          <li
             className="tagFilter"
-            type="radio"
-            value="All"
-            name="filter"
-            onClick={(e) => {
-              setSelectedTag(e.target.value);
+            style={{
+              backgroundColor: `${true === "All" ? "var(--focus-color)" : ""}`
             }}
-          />
-        </label>
-        {tags.map((tag) => {
-          return (
-            <label
-              key={tag}
-              style={{
-                backgroundColor: `${
-                  tag === selectedTag ? "var(--focus-color)" : ""
-                }`
-              }}
-            >
-              {tag}
-              <input
+          >
+            <span>
+              <i class="fas fa-tag"></i>
+            </span>
+            All
+          </li>
+          {tags.map((tag) => {
+            return (
+              <li
                 className="tagFilter"
-                type="radio"
-                value={tag}
-                name="filter"
-                onClick={(e) => {
-                  setSelectedTag(e.target.value);
+                key={tag}
+                style={{
+                  backgroundColor: `${tag === true ? "var(--focus-color)" : ""}`
                 }}
-              />
-            </label>
-          );
-        })}
+              >
+                <span>
+                  <i class="fas fa-tag"></i>
+                </span>
+                {tag}
+              </li>
+            );
+          })}
+        </ul>
         <div className="input-for-new-tag">
           <input
             value={newTag}
@@ -79,7 +73,6 @@ export function TagsFilter({ tags, setTags, setSelectedTag, selectedTag }) {
           <button
             onClick={() => {
               if (newTag && !tags.includes(newTag)) {
-                setTags([...tags, newTag]);
                 setNewTag("");
               }
             }}

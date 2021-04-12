@@ -3,88 +3,62 @@ import { Pin } from "./Pin";
 import { ColorPicker } from "./ColorPicker";
 import { InputNote } from "./InputNote";
 import "./eachNoteStyles.css";
+import { useNotes } from "../Context";
 
-export function EachNote({ id, item, notes, setNotes, tags }) {
-  const [isPinned, setPinned] = useState(item.isPinned);
-  const [notecolor, setNotecolor] = useState(item.notecolor);
+export function EachNote({ id, note }) {
   const [isEditMode, setEditMode] = useState(false);
-  function pinClickHandler() {
-    setNotes({
-      ...notes,
-      [id]: {
-        title: item.title,
-        desc: item.desc,
-        isPinned: !isPinned,
-        tag: item.tag,
-        notecolor: item.notecolor
-      }
-    });
-    setPinned(!isPinned);
-  }
-  function colorChangeHandler(color) {
-    setNotes({
-      ...notes,
-      [id]: {
-        title: item.title,
-        desc: item.desc,
-        isPinned: item.isPinned,
-        tag: item.tag,
-        notecolor: color
-      }
-    });
-    setNotecolor(color);
-  }
+
+  const { dispatch } = useNotes();
 
   return (
     <div className="grid-item-stretch">
       <div
         className="grid-item-note input-container"
         style={{
-          backgroundColor: item.notecolor,
+          backgroundColor: note.notecolor,
           visibility: isEditMode ? "hidden" : "visible"
         }}
       >
         <div
           className="input-text-section-container"
           onClick={() => {
-            setEditMode(!isEditMode);
+            setEditMode((flag) => !flag);
           }}
         >
           <div className="input-text-section">
-            <h3>{item.title}</h3>
-            <p>{item.desc}</p>
+            <h3>{note.title}</h3>
+            <p>{note.desc}</p>
           </div>
           <div>
             <Pin
-              isPinned={isPinned}
-              setPinned={setPinned}
-              clickHandler={pinClickHandler}
+              note={note}
+              pinClickHandler={(note) =>
+                dispatch({
+                  type: "UPDATE_NOTE",
+                  payload: { ...note, isPinned: !note.isPinned }
+                })
+              }
             />
           </div>
         </div>
+
         <div className="edit-section-container">
           <div className="edit-section">
-            <span className="tag">{item.tag}</span>
-
+            <span className="tag">{note.tag}</span>
             <ColorPicker
-              notecolor={notecolor}
-              setNotecolor={setNotecolor}
-              colorChangeHandler={colorChangeHandler}
-              setNotes={setNotes}
-              notes={notes}
+              note={note}
+              colorPickedHandler={(color) =>
+                dispatch({
+                  type: "UPDATE_NOTE",
+                  payload: { ...note, notecolor: color }
+                })
+              }
             />
           </div>
 
           <button
             onClick={() => {
-              setNotes(
-                Object.keys(notes).reduce((object, key) => {
-                  if (key !== id) {
-                    object[key] = notes[key];
-                  }
-                  return object;
-                }, {})
-              );
+              dispatch({ type: "DELETE_NOTE", payload: note });
             }}
           >
             <i className="fas fa-trash-alt"></i>
@@ -92,27 +66,19 @@ export function EachNote({ id, item, notes, setNotes, tags }) {
         </div>
       </div>
 
-      <div className={isEditMode ? "editInput-container" : ""}>
-        <div className={isEditMode ? "editInput" : ""}>
-          {isEditMode ? (
+      {isEditMode && (
+        <div className="editInput-container">
+          <div className="editInput">
             <InputNote
-              id={id}
-              titleEx={item.title}
-              descEx={item.desc}
-              tagEx={item.tag}
-              isPinnedEx={item.isPinned}
-              notecolorEx={item.notecolor}
-              notes={notes}
-              setNotes={setNotes}
-              tags={tags}
-              isEditMode={isEditMode}
-              setEditMode={setEditMode}
+              noteExisting={note}
+              saveHandler={(note) => {
+                dispatch({ type: "UPDATE_NOTE", payload: note });
+                setEditMode(false);
+              }}
             />
-          ) : (
-            ""
-          )}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

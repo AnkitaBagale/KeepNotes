@@ -1,113 +1,103 @@
-import { useState } from "react";
+import { useReducer } from "react";
 import "./inputNoteStyles.css";
 import { Pin } from "./Pin";
 import { ColorPicker } from "./ColorPicker";
+import { useNotes } from "../Context";
+import { v4 as uuidv4 } from "uuid";
 
-export function InputNote({
-  id,
-  titleEx = "",
-  descEx = "",
-  tagEx = "Work",
-  isPinnedEx = false,
-  notecolorEx = "#FFFFFF",
-  notes,
-  setNotes,
-  tags,
-  isEditMode,
-  setEditMode
-}) {
-  const [title, setTitle] = useState(titleEx);
-  const [desc, setDesc] = useState(descEx);
-  const [tag, setTag] = useState(tagEx);
-  const [isPinned, setPinned] = useState(isPinnedEx);
-  const [notecolor, setNotecolor] = useState(notecolorEx);
-  const [error, setError] = useState("");
+const initialInput = {
+  id: null,
+  title: "",
+  desc: "",
+  tag: "Work",
+  isPinned: false,
+  notecolor: "#FFFFFF"
+};
 
-  function addNote() {
-    if (Object.keys(notes).includes(id)) {
-      setNotes({
-        ...notes,
-        [id]: {
-          title: title,
-          desc: desc,
-          tag: tag,
-          isPinned: isPinned,
-          notecolor: notecolor
-        }
-      });
-      setEditMode(!isEditMode);
-    } else {
-      if (title && desc) {
-        setNotes({
-          ...notes,
-          [`${Object.keys(notes).length + 1}`]: {
-            title: title,
-            desc: desc,
-            tag: tag,
-            isPinned: isPinned,
-            notecolor: notecolor
-          }
-        });
-        setTitle("");
-        setDesc("");
-        setTag("Work");
-        setPinned(false);
-        setNotecolor("#FFFFFF");
-        setError("");
-      } else {
-        setError("Please fill title,description");
+export function InputNote({ noteExisting = initialInput, saveHandler }) {
+  const formReducer = (formState, { type, payload }) => {
+    switch (type) {
+      case "SET_TITLE": {
+        return { ...formState, title: payload };
       }
+      case "SET_DESC": {
+        return { ...formState, desc: payload };
+      }
+      case "SET_TAG": {
+        return { ...formState, tag: payload };
+      }
+      case "SET_IS_PINNED": {
+        return { ...formState, isPinned: payload };
+      }
+      case "SET_NOTE_COLOR": {
+        return { ...formState, notecolor: payload };
+      }
+      case "SET_ERROR": {
+        return { ...formState, error: payload };
+      }
+      case "CLEAR_FORM": {
+        return initialInput;
+      }
+      default:
+        return formState;
     }
-  }
-  function pinClickHandler() {
-    setPinned(!isPinned);
-  }
-  function colorChangeHandler(color) {
-    setNotecolor(color);
-  }
+  };
+  const [formState, formDispatch] = useReducer(formReducer, noteExisting);
+  const {
+    state: { tags }
+  } = useNotes();
+
   return (
-    <div className="input-container" style={{ backgroundColor: notecolor }}>
+    <div
+      className="input-container"
+      style={{ backgroundColor: formState.notecolor }}
+    >
       <div className="input-text-section-container flexGrow">
         <div className="input-text-section">
           <textarea
             rows="1"
             className="text title-text-style"
-            onChange={(e) => {
-              setTitle(e.target.value);
-            }}
+            onChange={(e) =>
+              formDispatch({ type: "SET_TITLE", payload: e.target.value })
+            }
             type="text"
             placeholder="Title"
-            value={title}
-            autoFocus
+            value={formState.title}
           />
 
           <textarea
             rows="1"
             className="text"
-            onChange={(e) => {
-              setDesc(e.target.value);
-            }}
+            onChange={(e) =>
+              formDispatch({ type: "SET_DESC", payload: e.target.value })
+            }
             type="text"
             placeholder="Take a note..."
-            value={desc}
+            value={formState.desc}
           />
         </div>
+
         <div>
           <Pin
-            isPinned={isPinned}
-            setPinned={setPinned}
-            clickHandler={pinClickHandler}
+            note={formState}
+            pinClickHandler={(note) =>
+              formDispatch({
+                type: "SET_IS_PINNED",
+                payload: !note.isPinned
+              })
+            }
           />
         </div>
       </div>
+
       <div className="edit-section-container">
         <div className="edit-section">
           <select
             className="tag"
-            onChange={(e) => {
-              setTag(e.target.value);
-            }}
-            value={tag}
+            onChange={(e) =>
+              formDispatch({ type: "SET_TAG", payload: e.target.value })
+            }
+            value={formState.tag}
             name="tagSelector"
           >
             {tags.map((tag) => {
@@ -119,14 +109,36 @@ export function InputNote({
             })}
           </select>
           <ColorPicker
-            notecolor={notecolor}
-            setNotecolor={setNotecolor}
-            colorChangeHandler={colorChangeHandler}
+            note={formState}
+            colorPickedHandler={(color) =>
+              formDispatch({
+                type: "SET_NOTE_COLOR",
+                payload: color
+              })
+            }
           />
         </div>
-        <button onClick={addNote}>Close</button>
+        <button
+          onClick={() => {
+            if (formState.title || formState.desc) {
+              if (formState.id === null) {
+                saveHandler({ ...formState, id: uuidv4() });
+                formDispatch({ type: "CLEAR_FORM" });
+              } else {
+                saveHandler(formState);
+              }
+            } else {
+              formDispatch({
+                type: "SET_ERROR",
+                payload: "please fill title or description to continue!"
+              });
+            }
+          }}
+        >
+          Save
+        </button>
       </div>
-      <div>{error}</div>
+      <div>{formState.error}</div>
     </div>
   );
 }
